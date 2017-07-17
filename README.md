@@ -1,34 +1,20 @@
-# Docker container
-To use, first install docker: https://docs.docker.com/engine/installation/
+# Human intervention reinforcement learning
 
-To build and start the docker image:
+## Overview
 
-```
-docker build -t base -f base.docker .
-docker build -t main -f main.docker .
-```
+This repository contains the code for human intervention reinforcement learning in Atari environments (based on OpenAI's Gym). The `humanrl` package contains various Gym environment wrappers and utilities that allow modifying Atari environments to include catastrophes.
 
-On Ubuntu:
-```
-docker run --name=human-rl -t -i -v /var/run/docker.sock:/var/run/docker.sock --net=host -v `pwd`:/mnt/human-rl/ main
-```
+`scripts/human_feedback.py` is a script that allows a human to intervene during offline or online training of an RL agent.
 
-On OS X (works on 10.12.2):
-```
-docker run --privileged -p 5901:5900 -v /usr/bin/docker:/user/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v `pwd`:/mnt/human-rl -e DOCKER_NET_HOST=172.17.0.1 -t -i main
-open vnc://localhost:5901
+## Installation and use
+
+To label and run the code locally, first create an Anaconda environment with our packages:
+
+```bash
+conda env create
+source activate humanrl
 ```
 
-Which launches a command line version of the docker container
+See [the human feedback README](https://github.com/gsastry/human-rl/tree/master/scripts/README.md) for directions on providing human feedback with the OpenAI universe starter agent.
 
-and to restart the docker container later:
-
-`docker start human-rl`
-
-`docker attach human-rl`
-
-(Note: the -v /var/run/docker.sock:/var/run/docker.sock --net=host options are necessary to allow the universe to use automatic remotes. This may not work outside of ubuntu. In this case, you may need to manually start universe remotes and point openai gym at them, see https://github.com/openai/universe/blob/master/doc/remotes.rst#how-to-start-a-remote)
-
-It also opens a vnc server on port 5900. To view gym environments, you can run the training from the vnc session. (password is openai)
-
-GPU support seems to work. One necessary prerequisite is https://github.com/NVIDIA/nvidia-docker. (For ubuntu 16.10, the following fix is required: https://github.com/NVIDIA/nvidia-docker/issues/234)
+See the [catastrophe wrapper](https://github.com/gsastry/human-rl/blob/master/humanrl/catastrophe_wrapper.py) for a general purpose way to add catastrophes to Gym environments.
