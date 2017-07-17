@@ -1,0 +1,10 @@
+.git
+logs
+models
+labels
+writeups
+experiments
+videos
+notebooks
+work_from_2016_nips_workshop
+__pycache__

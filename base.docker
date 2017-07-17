@@ -1,0 +1,72 @@
+# Taken from https://github.com/openai/universe/blob/master/Dockerfile
+# (no official image exists yet, once it does it would be better to include it
+# directly)
+FROM tensorflow/tensorflow:latest-py3
+RUN add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
+RUN apt-get update \
+    && apt-get install -y libav-tools \
+    python3-numpy \
+    python3-scipy \
+    python3-setuptools \
+    libpq-dev \
+    libjpeg-dev \
+    curl \
+    cmake \
+    swig \
+    python3-opengl \
+    libboost-all-dev \
+    libsdl2-dev \
+    wget \
+    unzip \
+    git \
+    golang \
+    net-tools \
+    iptables \
+    libvncserver-dev \
+    software-properties-common \
+    python3-dev \
+    tmux \
+    htop \
+    graphviz \
+    x11vnc \
+    xvfb
+#    libcupti-dev
+
+# Manually upgrade pip
+RUN curl -O https://bootstrap.pypa.io/get-pip.py
+RUN python3 get-pip.py
+
+  RUN ln -sf /usr/local/bin/pip3 /usr/local/bin/pip \
+    && ln -sf /usr/bin/python3 /usr/local/bin/python \
+    && pip install -U pip
+
+# Install gym
+RUN pip install gym[all]
+
+# Get the faster VNC driver
+RUN pip install go-vncdriver>=0.4.0
+
+# Force the container to use the go vnc driver
+ENV UNIVERSE_VNCDRIVER='go'
+
+WORKDIR /usr/local/
+
+RUN pip install universe six opencv-python pygame pydotplus sklearn pandas tqdm
+
+WORKDIR /mnt/human-rl/
+
+RUN mkdir ~/.vnc && \
+  touch ~/.vnc/passwd
+
+RUN x11vnc -storepasswd "openai" ~/.vnc/passwd
+
+ENV HISTFILE="/mnt/human-rl/history"
+ENV DISPLAY=:20
+
+ADD docker/.bashrc usr/local/.bashrc
+RUN cat usr/local/.bashrc >> ~/.bashrc
+
+RUN apt-get clean
+# && rm -rf /var/lib/apt/lists/*
+
+CMD ["bash"]

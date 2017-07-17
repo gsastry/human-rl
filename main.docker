@@ -1,0 +1,7 @@
+FROM base
+
+RUN pip install git+https://github.com/vladfi1/PyGame-Learning-Environment.git
+RUN pip install git+https://github.com/vladfi1/gym-ple.git
+RUN pip install 'atari-py==0.0.21' --force-reinstall
+
+CMD ["bash"]
