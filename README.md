@@ -1,6 +1,6 @@
 # Human intervention reinforcement learning 
 
-Research code for the paper "Trial without Error: Towards Safe Reinforcement Learning via Human Intervention" (2017)
+Research code for the paper "*Trial without Error: Towards Safe Reinforcement Learning via Human Intervention*" (2017)
 
 Contributors (alphabetical): Owain Evans, Vlad Firoiu, Girish Sastry, William Saunders
 
